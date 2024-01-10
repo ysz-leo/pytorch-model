@@ -23,12 +23,14 @@ import argparse
 import timm
 from timm.utils.model import reparameterize_model
 from timm.utils.onnx import onnx_export
+import onnx
+from onnxsim import simplify
 
 parser = argparse.ArgumentParser(description='PyTorch ImageNet Validation')
 parser.add_argument('--output', metavar='ONNX_FILE',default='model.onnx',
                     help='output model filename')
-parser.add_argument('--model', '-m', metavar='MODEL', default='mobilenetv3_large_100',
-                    help='model architecture (default: mobilenetv3_large_100)')
+parser.add_argument('--model', '-m', metavar='MODEL', default='regnety_008_tv',
+                    help='model architecture (default: regnety_008_tv:RegNetY-800MF)')
 # parser.add_argument('--model', '-m', metavar='MODEL', default='RegNetY-400MF',
 #                     help='model architecture (default: RegNetY-400MF)')
 parser.add_argument('--opset', type=int, default=None,
@@ -43,7 +45,9 @@ parser.add_argument('--check-forward', action='store_true', default=False,
                     help='Do a full check of torch vs onnx forward after export.')
 parser.add_argument('-b', '--batch-size', default=1, type=int,
                     metavar='N', help='mini-batch size (default: 1)')
-parser.add_argument('--img-size', default=None, type=int,
+# parser.add_argument('--img_size', default=None, type=int,
+#                     metavar='N', help='Input image dimension, uses model default if empty')
+parser.add_argument('--img_size', default=224, type=int,
                     metavar='N', help='Input image dimension, uses model default if empty')
 parser.add_argument('--mean', type=float, nargs='+', default=None, metavar='MEAN',
                     help='Override mean pixel value of dataset')
@@ -63,7 +67,8 @@ parser.add_argument('--verbose', default=False, action='store_true',
 def main():
     args = parser.parse_args()
 
-    args.pretrained = True
+    # args.pretrained = True
+    args.pretrained = False
     if args.checkpoint:
         args.pretrained = False
 
@@ -71,13 +76,14 @@ def main():
     # NOTE exportable=True flag disables autofn/jit scripted activations and uses Conv2dSameExport layers
     # for models using SAME padding
     model = timm.create_model(
-        args.model,
+        args.model,   #模型名
         num_classes=args.num_classes,
         in_chans=3,
         pretrained=args.pretrained,
         checkpoint_path=args.checkpoint,
         exportable=True,
     )
+    print(model)
 
     if args.reparam:
         model = reparameterize_model(model)
@@ -96,6 +102,12 @@ def main():
         batch_size=args.batch_size,
     )
 
-
+    # 加载导出的 ONNX 模型
+    onnx_model = onnx.load(args.output)
+    # 简化模型
+    simplified_model, check = simplify(onnx_model)  #会去除一些无用节点和边，以减少模型的复杂性和计算负担,但也可能丢失一些细节信息。
+    # 保存简化后的模型
+    onnx.save_model(simplified_model, "simplified_model.onnx")    
+    
 if __name__ == '__main__':
     main()

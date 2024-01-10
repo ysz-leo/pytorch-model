@@ -355,7 +355,7 @@ def _gen_mobilenet_v3(variant: str, channel_multiplier: float = 1.0, pretrained:
 
     Args:
       channel_multiplier: multiplier to number of channels per layer.
-    """
+    """  
     if 'small' in variant:
         num_features = 1024
         if 'minimal' in variant:
