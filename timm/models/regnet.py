@@ -60,11 +60,9 @@ class RegNetCfg:
     act_layer: Union[str, Callable] = 'relu'
     norm_layer: Union[str, Callable] = 'batchnorm'
 
-
 def quantize_float(f, q):
     """Converts a float to the closest non-zero int divisible by q."""
     return int(round(f / q) * q)
-
 
 def adjust_widths_groups_comp(widths, bottle_ratios, groups, min_ratio=0.):
     """Adjusts the compatibility of widths and groups."""
@@ -245,7 +243,6 @@ class Bottleneck(nn.Module):
         x = self.act3(x)
         return x
 
-
 class PreBottleneck(nn.Module):
     """ RegNet Bottleneck
 
@@ -370,7 +367,7 @@ class RegStage(nn.Module):
 
 class RegNet(nn.Module):
     """RegNet-X, Y, and Z Models
-
+    
     Paper: https://arxiv.org/abs/2003.13678
     Original Impl: https://github.com/facebookresearch/pycls/blob/master/pycls/models/regnet.py
     """

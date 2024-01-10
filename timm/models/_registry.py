@@ -288,7 +288,6 @@ def model_entrypoint(model_name: str, module_filter: Optional[str] = None) -> Ca
         raise RuntimeError(f'Model ({model_name} not found in module {module_filter}.')
     return _model_entrypoints[arch_name]
 
-
 def list_modules() -> List[str]:
     """ Return list of module names that contain models / model entrypoints
     """

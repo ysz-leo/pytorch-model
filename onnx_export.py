@@ -25,10 +25,12 @@ from timm.utils.model import reparameterize_model
 from timm.utils.onnx import onnx_export
 
 parser = argparse.ArgumentParser(description='PyTorch ImageNet Validation')
-parser.add_argument('output', metavar='ONNX_FILE',
+parser.add_argument('--output', metavar='ONNX_FILE',default='model.onnx',
                     help='output model filename')
 parser.add_argument('--model', '-m', metavar='MODEL', default='mobilenetv3_large_100',
                     help='model architecture (default: mobilenetv3_large_100)')
+# parser.add_argument('--model', '-m', metavar='MODEL', default='RegNetY-400MF',
+#                     help='model architecture (default: RegNetY-400MF)')
 parser.add_argument('--opset', type=int, default=None,
                     help='ONNX opset to use (default: 10)')
 parser.add_argument('--keep-init', action='store_true', default=False,
