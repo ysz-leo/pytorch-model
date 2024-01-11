@@ -400,7 +400,7 @@ def build_model_with_cfg(
         model = model_cls(cfg=model_cfg, **kwargs)
     model.pretrained_cfg = pretrained_cfg
     model.default_cfg = model.pretrained_cfg  # alias for backwards compat
-
+    
     if pruned:
         model = adapt_model_from_file(model, variant)
 

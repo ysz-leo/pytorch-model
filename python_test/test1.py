@@ -1,5 +1,4 @@
 
-
 import torch
 
 input_size = (3, 0, 0)

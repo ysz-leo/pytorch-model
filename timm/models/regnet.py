@@ -900,7 +900,6 @@ def regnetx_004(pretrained=False, **kwargs) -> RegNet:
     """RegNetX-400MF"""
     return _create_regnet('regnetx_004', pretrained, **kwargs)
 
-
 @register_model
 def regnetx_004_tv(pretrained=False, **kwargs) -> RegNet:
     """RegNetX-400MF w/ torchvision group rounding"""

@@ -108,6 +108,6 @@ def main():
     simplified_model, check = simplify(onnx_model)  #会去除一些无用节点和边，以减少模型的复杂性和计算负担,但也可能丢失一些细节信息。
     # 保存简化后的模型
     onnx.save_model(simplified_model, "simplified_model.onnx")    
-    
+
 if __name__ == '__main__':
     main()
